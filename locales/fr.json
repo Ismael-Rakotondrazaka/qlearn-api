@@ -1,0 +1,15 @@
+{
+  "errors": {
+    "default": "Quelque chose ne fonctionne pas correctement. Veuillez réessayer.",
+    "requests": {
+      "defaults": {
+        "badRequest": "La requête est invalide.",
+        "notFound": "La ressource est introuvable.",
+        "forbidden": "Vous n'avez pas la permission d'accéder à cette ressource.",
+        "unauthorize": "Vous n'êtes pas autorisé.",
+        "internalServer": "Une erreur interne du serveur s'est produite.",
+        "notImplemented": "Cette fonctionnalité n'est pas implémentée."
+      }
+    }
+  }
+}
