@@ -1,5 +1,5 @@
 export * from "./exceptions";
-export * from "./loggers";
+export * from "./providers";
 export * from "./requests";
 export * from "./responses";
 export * from "./schemas";

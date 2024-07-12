@@ -1,11 +1,20 @@
-import type { EventHandlerRequest, H3Event } from "h3";
+import type { H3Event } from "h3";
+import type { QueryObject } from "ufo";
 import type { z } from "zod";
 import type { Validator } from "../validations";
 
-export class RequestInputGetter<Request extends EventHandlerRequest> {
+export class RequestInputGetter<
+  Request extends {
+    body?: unknown;
+    query?: QueryObject;
+    routerParams?: Record<string, string | number | never>;
+  },
+> {
+  // @ts-expect-error - In Request.routerParams, type number is not assignable to type string
   #event: H3Event<Request>;
   #validator: Validator;
 
+  // @ts-expect-error - In Request.routerParams, type number is not assignable to type string
   constructor(event: H3Event<Request>, validator: Validator) {
     this.#event = event;
     this.#validator = validator;
