@@ -9,6 +9,11 @@
         "unauthorize": "Vous n'êtes pas autorisé.",
         "internalServer": "Une erreur interne du serveur s'est produite.",
         "notImplemented": "Cette fonctionnalité n'est pas implémentée."
+      },
+      "register": {
+        "email": {
+          "alreadyUsed": "Le mail est déjà utilisé."
+        }
       }
     }
   }
