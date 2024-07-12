@@ -21,6 +21,14 @@
             "differentSize": "Le questionnaire doit contenir 10 questions."
           }
         }
+      },
+      "questions": {
+        "store": {
+          "answers": {
+            "noCorrect": "Au moins une réponse doit être correcte.",
+            "noIncorrect": "Au moins une réponse doit être incorrecte."
+          }
+        }
       }
     }
   }

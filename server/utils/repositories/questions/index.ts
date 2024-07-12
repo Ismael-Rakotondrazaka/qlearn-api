@@ -33,7 +33,9 @@ export class QuestionRepository {
 
   public async findMany(arg: {
     where?: Prisma.QuestionWhereInput;
-    orderBy?: Prisma.QuestionOrderByWithRelationInput;
+    orderBy?:
+      | Prisma.QuestionOrderByWithRelationInput
+      | Prisma.QuestionOrderByWithRelationInput[];
   }) {
     const { where, orderBy } = arg;
 
