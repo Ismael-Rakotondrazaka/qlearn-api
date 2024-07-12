@@ -14,6 +14,13 @@
         "email": {
           "alreadyUsed": "Le mail est déjà utilisé."
         }
+      },
+      "sessions": {
+        "store": {
+          "sessionAnswers": {
+            "differentSize": "Le questionnaire doit contenir 10 questions."
+          }
+        }
       }
     }
   }

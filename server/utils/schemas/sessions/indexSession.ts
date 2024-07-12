@@ -5,6 +5,7 @@ import type { Request } from "../../requests";
 import type { ResponseError } from "../../responses";
 
 export const IndexSessionQuerySchema = z.object({
+  "userId[eq]": z.coerce.number().optional(),
   "orderBy[createdAt]": z.enum(["asc", "desc"]).optional().default("desc"),
 });
 
