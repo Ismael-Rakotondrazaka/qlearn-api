@@ -1,9 +1,12 @@
-import type { Answer, Question, SessionAnswer } from "@prisma/client";
+import type { Answer, Category, Question, SessionAnswer } from "@prisma/client";
 import { AnswerDTOMapper, type AnswerDTO } from "./answers";
+import { CategoryDTOMapper } from "./categories";
 
 export type QuestionDTO = {
   id: number;
   content: string;
+  difficulty: number;
+  category: CategoryDTO;
   createdAt: Date;
   updatedAt: Date;
   answers: AnswerDTO[];
@@ -17,6 +20,7 @@ export type QuestionDTO = {
 export abstract class QuestionDTOMapper {
   public static fromQuestion(
     question: Question & {
+      category: Category;
       answers: Answer[];
       sessionAnswers: (SessionAnswer & {
         answer: Answer;
@@ -33,8 +37,10 @@ export abstract class QuestionDTOMapper {
     return {
       id: question.id,
       content: question.content,
+      difficulty: question.difficulty,
       createdAt: question.createdAt,
       updatedAt: question.updatedAt,
+      category: CategoryDTOMapper.fromCategory(question.category),
       answers: AnswerDTOMapper.fromAnswers(question.answers),
       attempts: {
         count,
@@ -46,6 +52,7 @@ export abstract class QuestionDTOMapper {
 
   public static fromQuestions(
     questions: (Question & {
+      category: Category;
       answers: Answer[];
       sessionAnswers: (SessionAnswer & {
         answer: Answer;
