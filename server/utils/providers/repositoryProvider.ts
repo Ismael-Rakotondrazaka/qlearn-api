@@ -1,5 +1,6 @@
 import { prismaClient } from "../prisma";
 import { UserRepository } from "../repositories";
+import { AnswerRepository } from "../repositories/answers";
 import { CategoryRepository } from "../repositories/categories";
 
 export abstract class RepositoryProvider {
@@ -7,7 +8,8 @@ export abstract class RepositoryProvider {
     prismaClient,
   );
 
-  public static categoryRepository: CategoryRepository = new CategoryRepository(
-    prismaClient,
-  );
+  public static categoryRepository: CategoryRepository =
+    new CategoryRepository();
+
+  public static answerRepository: AnswerRepository = new AnswerRepository();
 }
