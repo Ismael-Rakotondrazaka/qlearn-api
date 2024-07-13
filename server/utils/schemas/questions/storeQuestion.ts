@@ -6,6 +6,8 @@ import type { ResponseError } from "../../responses";
 
 export const StoreQuestionBodySchema = z.object({
   content: z.string(),
+  difficulty: z.coerce.number().positive().int().min(1).max(5),
+  categoryId: z.coerce.number().positive().int(),
   answers: z
     .array(
       z.object({

@@ -50,9 +50,9 @@ export class RequestInputGetter<
     return result;
   }
 
-  async getValidatedBody<TSchema extends z.ZodType<Request["body"]>>(
-    schema: TSchema,
-  ): Promise<Request["body"]> {
+  async getValidatedBody<
+    TSchema extends z.ZodType<Request["body"], z.ZodTypeDef, unknown>,
+  >(schema: TSchema): Promise<Request["body"]> {
     const body = await this.getUnsafeBody();
     return this.#validator.validate(schema, body);
   }
@@ -61,9 +61,9 @@ export class RequestInputGetter<
     return getRouterParams(this.#event);
   }
 
-  async getValidatedParams<TSchema extends z.ZodType<Request["routerParams"]>>(
-    schema: TSchema,
-  ) {
+  async getValidatedParams<
+    TSchema extends z.ZodType<Request["routerParams"], z.ZodTypeDef, unknown>,
+  >(schema: TSchema) {
     return this.#validator.validate(schema, this.getUnsafeParams());
   }
 
@@ -71,9 +71,9 @@ export class RequestInputGetter<
     return getQuery(this.#event);
   }
 
-  getValidatedQueries<TSchema extends z.ZodType<Request["query"]>>(
-    schema: TSchema,
-  ) {
+  getValidatedQueries<
+    TSchema extends z.ZodType<Request["query"], z.ZodTypeDef, unknown>,
+  >(schema: TSchema) {
     return this.#validator.validate(schema, this.getUnsafeQueries());
   }
 }

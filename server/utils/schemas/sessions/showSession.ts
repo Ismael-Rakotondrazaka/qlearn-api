@@ -5,7 +5,7 @@ import type { Request } from "../../requests";
 import type { ResponseError } from "../../responses";
 
 export const ShowSessionParamsSchema = z.object({
-  "orderBy[createdAt]": z.enum(["asc", "desc"]).optional().default("desc"),
+  id: z.coerce.number().positive().int(),
 });
 
 export type ShowSessionParams = z.infer<typeof ShowSessionParamsSchema>;

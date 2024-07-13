@@ -12,6 +12,10 @@ export type SignInBody = z.infer<typeof SignInBodySchema>;
 
 export type SignInData = {
   user: UserDTO;
+  accessToken: {
+    token: string;
+    expiresAt: Date;
+  };
 };
 
 export type SignInRequest = Request<SignInData, SignInBody>;

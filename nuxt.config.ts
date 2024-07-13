@@ -10,6 +10,17 @@ export default defineNuxtConfig({
     typeCheck: false,
   },
 
+  nitro: {
+    experimental: {
+      openAPI: true,
+    },
+  },
+
+  runtimeConfig: {
+    accessTokenLife: 0,
+    accessTokenSecret: "",
+  },
+
   modules: ["@nuxt/eslint", "nuxt-zod-i18n", "@nuxtjs/i18n"],
 
   i18n: {
