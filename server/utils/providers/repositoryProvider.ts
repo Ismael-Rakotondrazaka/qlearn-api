@@ -1,10 +1,15 @@
 import { prismaClient } from "../prisma";
 import { AnswerRepository, UserRepository } from "../repositories";
+import { CategoryRepository } from "../repositories/categories";
 import { QuestionRepository } from "../repositories/questions";
 import { SessionRepository } from "../repositories/sessions";
 
 export abstract class RepositoryProvider {
   public static userRepository: UserRepository = new UserRepository(
+    prismaClient,
+  );
+
+  public static categoryRepository: CategoryRepository = new CategoryRepository(
     prismaClient,
   );
 

@@ -60,6 +60,26 @@ export class AnswerRepository {
     return answer;
   }
 
+  public async findOneByFk(arg: { questionId: number | undefined }) {
+    const { questionId } = arg;
+    const question = await this.#prismaClient.question.findUnique({
+      where: {
+        id: questionId,
+      },
+      include: {
+        category: true,
+        answers: true,
+        sessionAnswers: {
+          include: {
+            selectedAnswer: true,
+          },
+        },
+      },
+    });
+
+    return question;
+  }
+
   public async deleteOne(arg: { where: Prisma.AnswerWhereUniqueInput }) {
     const { where } = arg;
 

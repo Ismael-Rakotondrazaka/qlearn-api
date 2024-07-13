@@ -1,8 +1,8 @@
 import { faker } from "@faker-js/faker";
 import type { Answer, Category, Question, SessionAnswer } from "@prisma/client";
-import { AnswerDTOMapper, type AnswerDTO } from "./answers";
+import type { AnswerDTO } from "./answers";
+import { AnswerDTOMapper } from "./answers";
 import { CategoryDTOMapper } from "./categories";
-
 export type QuestionDTO = {
   id: number;
   content: string;
@@ -33,7 +33,7 @@ export abstract class QuestionDTOMapper {
       (prev, curr) => (curr.selectedAnswer.isCorrect ? prev + 1 : prev),
       0,
     );
-    const rate = (success / count) * 100;
+    const rate = count > 0 ? (success / count) * 100 : 0; // Avoid division by zero
 
     return {
       id: question.id,

@@ -6,7 +6,7 @@ import type { ResponseError } from "../../responses";
 
 export const StoreCategoryBodySchema = z.object({
   name: z.string(),
-  description: z.string().nullable(),
+  description: z.string().min(1).nullable().optional(),
 });
 
 export type StoreCategoryBody = z.infer<typeof StoreCategoryBodySchema>;
