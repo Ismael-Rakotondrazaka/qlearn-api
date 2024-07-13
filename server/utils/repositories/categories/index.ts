@@ -1,11 +1,10 @@
-import type { Prisma } from "@prisma/client";
-import type { PrismaClient } from "../../prisma";
+import { PrismaClient, type Prisma } from "@prisma/client";
 
 export class CategoryRepository {
   #prismaClient: PrismaClient;
 
-  constructor(prismaClient: PrismaClient) {
-    this.#prismaClient = prismaClient;
+  constructor() {
+    this.#prismaClient = new PrismaClient();
   }
 
   public async addOne(arg: { data: Prisma.CategoryCreateInput }) {
