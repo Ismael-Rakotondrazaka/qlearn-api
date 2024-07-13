@@ -1,3 +1,4 @@
+import { faker } from "@faker-js/faker";
 import type { Answer, Category, Question, SessionAnswer } from "@prisma/client";
 import type { AnswerDTO } from "./answers";
 import { AnswerDTOMapper } from "./answers";
@@ -23,7 +24,7 @@ export abstract class QuestionDTOMapper {
       category: Category;
       answers: Answer[];
       sessionAnswers: (SessionAnswer & {
-        selectedAnswer: Answer; // Use selectedAnswer here
+        selectedAnswer: Answer;
       })[];
     },
   ): QuestionDTO {
@@ -32,7 +33,7 @@ export abstract class QuestionDTOMapper {
       (prev, curr) => (curr.selectedAnswer.isCorrect ? prev + 1 : prev),
       0,
     );
-    const rate = count > 0 ? success / count : 0; // Avoid division by zero
+    const rate = count > 0 ? (success / count) * 100 : 0; // Avoid division by zero
 
     return {
       id: question.id,
@@ -41,7 +42,9 @@ export abstract class QuestionDTOMapper {
       createdAt: question.createdAt,
       updatedAt: question.updatedAt,
       category: CategoryDTOMapper.fromCategory(question.category),
-      answers: AnswerDTOMapper.fromAnswers(question.answers),
+      answers: faker.helpers.shuffle(
+        AnswerDTOMapper.fromAnswers(question.answers),
+      ),
       attempts: {
         count,
         success,

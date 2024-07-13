@@ -9,6 +9,26 @@
         "unauthorize": "Vous n'êtes pas autorisé.",
         "internalServer": "Une erreur interne du serveur s'est produite.",
         "notImplemented": "Cette fonctionnalité n'est pas implémentée."
+      },
+      "register": {
+        "email": {
+          "alreadyUsed": "Le mail est déjà utilisé."
+        }
+      },
+      "sessions": {
+        "store": {
+          "sessionAnswers": {
+            "differentSize": "Le questionnaire doit contenir 10 questions."
+          }
+        }
+      },
+      "questions": {
+        "store": {
+          "answers": {
+            "noCorrect": "Au moins une réponse doit être correcte.",
+            "noIncorrect": "Au moins une réponse doit être incorrecte."
+          }
+        }
       }
     }
   }
