@@ -1,7 +1,7 @@
 import type { Answer, Category, Question, SessionAnswer } from "@prisma/client";
-import { AnswerDTOMapper, type AnswerDTO } from "./answers";
+import type { AnswerDTO } from "./answers";
+import { AnswerDTOMapper } from "./answers";
 import { CategoryDTOMapper } from "./categories";
-
 export type QuestionDTO = {
   id: number;
   content: string;
@@ -23,16 +23,16 @@ export abstract class QuestionDTOMapper {
       category: Category;
       answers: Answer[];
       sessionAnswers: (SessionAnswer & {
-        answer: Answer;
+        selectedAnswer: Answer; // Use selectedAnswer here
       })[];
     },
   ): QuestionDTO {
     const count = question.sessionAnswers.length;
     const success = question.sessionAnswers.reduce(
-      (prev, curr) => (curr.answer.isCorrect ? prev + 1 : prev),
+      (prev, curr) => (curr.selectedAnswer.isCorrect ? prev + 1 : prev),
       0,
     );
-    const rate = success / count;
+    const rate = count > 0 ? success / count : 0; // Avoid division by zero
 
     return {
       id: question.id,
@@ -55,7 +55,7 @@ export abstract class QuestionDTOMapper {
       category: Category;
       answers: Answer[];
       sessionAnswers: (SessionAnswer & {
-        answer: Answer;
+        selectedAnswer: Answer;
       })[];
     })[],
   ): QuestionDTO[] {

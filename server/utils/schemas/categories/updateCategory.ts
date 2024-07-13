@@ -1,10 +1,9 @@
 import type { Simplify } from "type-fest";
 import { z } from "zod";
-import type { CategoryDTO, UserDTO } from "../../dtos";
+import type { CategoryDTO } from "../../dtos";
 import type { Request } from "../../requests";
 import type { ResponseError } from "../../responses";
 import { StoreCategoryBodySchema } from "./storeCategory";
-
 
 export const UpdateCategoryParamsSchema = z.object({
   id: z.coerce.number(),
@@ -25,6 +24,8 @@ export type UpdateCategoryRequest = Request<
   UpdateCategoryParams
 >;
 
-export type UpdateCategoryError = Simplify<ResponseError<UpdateCategoryRequest>>;
+export type UpdateCategoryError = Simplify<
+  ResponseError<UpdateCategoryRequest>
+>;
 
 export type UpdateCategoryErrorData = UpdateCategoryError["data"];
