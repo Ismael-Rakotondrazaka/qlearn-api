@@ -29,6 +29,14 @@
             "noIncorrect": "Au moins une réponse doit être incorrecte."
           }
         }
+      },
+      "answers": {
+        "update": {
+          "isCorrect": {
+            "noCorrect": "Au moins une réponse doit être correcte.",
+            "noIncorrect": "Au moins une réponse doit être incorrecte."
+          }
+        }
       }
     }
   }
