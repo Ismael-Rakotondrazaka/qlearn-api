@@ -1,6 +1,5 @@
 import type { Simplify } from "type-fest";
 import { z } from "zod";
-import type { QuestionDTO } from "../../dtos";
 import type { Request } from "../../requests";
 import type { ResponseError } from "../../responses";
 
@@ -13,7 +12,7 @@ export const IndexAnswerQuerySchema = z
 export type IndexAnswerQuery = z.infer<typeof IndexAnswerQuerySchema>;
 
 export type IndexAnswerData = {
-  question: QuestionDTO;
+  answers: AnswerDTO[];
 };
 
 export type IndexAnswerRequest = Request<

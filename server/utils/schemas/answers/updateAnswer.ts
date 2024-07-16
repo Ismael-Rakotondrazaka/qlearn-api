@@ -8,9 +8,12 @@ export const UpdateAnswerParamsSchema = z.object({
   id: z.coerce.number(),
 });
 
-export const UpdateAnswerBodySchema = z.object({
-  content: z.string().min(1),
-});
+export const UpdateAnswerBodySchema = z
+  .object({
+    content: z.string().min(1),
+    isCorrect: z.coerce.boolean(),
+  })
+  .partial();
 
 export type UpdateAnswerParams = z.infer<typeof UpdateAnswerParamsSchema>;
 export type UpdateAnswerBody = z.infer<typeof UpdateAnswerBodySchema>;

@@ -34,12 +34,56 @@ const __handler__: ToEventHandler<UpdateAnswerRequest> = async (event) => {
       UpdateAnswerBodySchema,
     );
 
+    if (body.isCorrect !== undefined) {
+      const answersCorrectness = await RepositoryProvider.answerRepository
+        .findMany({
+          where: {
+            questionId: foundAnswer.questionId,
+            NOT: {
+              id: answerParams.id,
+            },
+          },
+        })
+        .then((answers) =>
+          answers.map((answer) => answer.isCorrect).concat(body.isCorrect!),
+        );
+
+      const isNoCorrect = answersCorrectness.every(
+        (isCorrect) => isCorrect === false,
+      );
+      if (isNoCorrect) {
+        throw Exception.badRequest({
+          data: {
+            isCorrect: translator.t(
+              "errors.requests.answers.update.isCorrect.noCorrect",
+            ),
+          },
+          translator,
+        });
+      }
+
+      const isNoIncorrect = answersCorrectness.every(
+        (isCorrect) => isCorrect === true,
+      );
+      if (isNoIncorrect) {
+        throw Exception.badRequest({
+          data: {
+            isCorrect: translator.t(
+              "errors.requests.answers.update.isCorrect.noIncorrect",
+            ),
+          },
+          translator,
+        });
+      }
+    }
+
     const updatedAnswer = await RepositoryProvider.answerRepository.updateOne({
       where: {
         id: answerParams.id,
       },
       data: {
         content: body.content,
+        isCorrect: body.isCorrect,
       },
     });
 

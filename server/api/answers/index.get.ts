@@ -1,5 +1,5 @@
 import { RepositoryProvider } from "~/server/utils";
-import { QuestionDTOMapper } from "~/server/utils/dtos";
+import { AnswerDTOMapper } from "~/server/utils/dtos";
 
 const __handler__: ToEventHandler<IndexAnswerRequest> = async (event) => {
   const translator = await Translator.new(event);
@@ -13,24 +13,18 @@ const __handler__: ToEventHandler<IndexAnswerRequest> = async (event) => {
     );
 
     // Retrieve question from repository based on questionId
-    const question = await RepositoryProvider.answerRepository.findOneByFk({
-      questionId: params.questionId,
+    const answers = await RepositoryProvider.answerRepository.findMany({
+      where: {
+        questionId: params.questionId,
+      },
     });
 
-    // Handle case where question is not found
-    if (question == null) {
-      throw Exception.notFound({
-        data: {},
-        translator,
-      });
-    }
+    // Map the retrieved answer to DTO using QuestionDTOMapper
+    const mappedAnswers = AnswerDTOMapper.fromAnswers(answers);
 
-    // Map the retrieved question to DTO using QuestionDTOMapper
-    const mappedQuestion = QuestionDTOMapper.fromQuestion(question);
-
-    // Return the mapped question in the desired format
+    // Return the mapped answer in the desired format
     return {
-      question: mappedQuestion,
+      answers: mappedAnswers,
     };
   } catch (error) {
     // Handle and rethrow exceptions
