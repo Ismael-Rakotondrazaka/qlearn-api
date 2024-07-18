@@ -15,6 +15,7 @@ const __handler__: ToEventHandler<IndexSessionRequest> = async (event) => {
     const sessions = await RepositoryProvider.sessionRepository.findMany({
       where: {
         userId: query["userId[eq]"],
+        quizId: query["quizId[eq]"],
       },
       orderBy: {
         createdAt: query["orderBy[createdAt]"],

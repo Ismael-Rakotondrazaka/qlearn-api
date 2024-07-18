@@ -3,7 +3,6 @@ import type { Category } from "@prisma/client";
 export type CategoryDTO = {
   id: number;
   name: string;
-  description: string | null;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -13,7 +12,6 @@ export abstract class CategoryDTOMapper {
     return {
       id: category.id,
       name: category.name,
-      description: category.description,
       createdAt: category.createdAt,
       updatedAt: category.updatedAt,
     };

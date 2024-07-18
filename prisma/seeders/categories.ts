@@ -12,7 +12,6 @@ export const createCategories = async (arg: {
         const createdAt = faker.date.past();
         return {
           name: faker.lorem.word(),
-          description: faker.helpers.maybe(() => faker.lorem.sentence()),
           createdAt,
           updatedAt: createdAt,
         };

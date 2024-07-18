@@ -1,25 +1,25 @@
 import { faker } from "@faker-js/faker";
-import type { Prisma, PrismaClient, Session, User } from "@prisma/client";
+import type { Prisma, PrismaClient, Quiz, Session, User } from "@prisma/client";
 import type { QuestionPerCategory } from "./questions";
 import { createSessionAnswersData } from "./sessionAnswers";
 
 const createSessionData = (arg: {
   user: User;
+  quizzes: Quiz[];
   questions: QuestionPerCategory;
   refDate: Date;
 }): Prisma.SessionCreateInput[] => {
-  const { user, questions, refDate } = arg;
+  const { user, questions, refDate, quizzes } = arg;
 
   return faker.helpers.multiple(
     (): Prisma.SessionCreateInput => {
-      const categoryIdRaw = +faker.helpers.arrayElement(Object.keys(questions));
-      const difficultyRaw = +faker.helpers.arrayElement(
-        Object.keys(questions[categoryIdRaw]),
-      );
+      const selectedQuiz = faker.helpers.arrayElement(quizzes);
+
       const selectedQuestions = faker.helpers.arrayElements(
-        questions[categoryIdRaw][difficultyRaw],
+        questions[selectedQuiz.categoryId][selectedQuiz.difficulty],
         10,
       );
+
       const createdAt = faker.date.future({
         refDate,
       });
@@ -28,12 +28,11 @@ const createSessionData = (arg: {
       });
 
       return {
-        category: {
+        quiz: {
           connect: {
-            id: +categoryIdRaw,
+            id: selectedQuiz.id,
           },
         },
-        difficulty: +difficultyRaw,
         user: {
           connect: {
             id: user.id,
@@ -58,8 +57,9 @@ export const createSessions = async (arg: {
   prismaClient: PrismaClient;
   questions: QuestionPerCategory;
   users: User[];
+  quizzes: Quiz[];
 }): Promise<Session[]> => {
-  const { prismaClient, questions, users } = arg;
+  const { prismaClient, questions, users, quizzes } = arg;
 
   const results: Session[] = [];
 
@@ -68,6 +68,7 @@ export const createSessions = async (arg: {
       createSessionData({
         user,
         questions,
+        quizzes,
         refDate: user.createdAt,
       }).map((data) =>
         prismaClient.session.create({
