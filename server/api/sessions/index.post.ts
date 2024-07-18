@@ -18,7 +18,20 @@ const __handler__: ToEventHandler<StoreSessionRequest> = async (event) => {
       StoreSessionBodySchema,
     );
 
-    // TODO verify if body.categoryId exists
+    const quiz = await RepositoryProvider.quizRepository.findOne({
+      where: {
+        id: body.quizId,
+      },
+    });
+    if (quiz === null)
+      throw Exception.badRequest({
+        data: {
+          quizId: translator.t(
+            "errors.requests.sessions.store.quizId.notFound",
+          ),
+        },
+        translator,
+      });
 
     const answers = await RepositoryProvider.answerRepository.findMany({
       where: {
@@ -26,9 +39,9 @@ const __handler__: ToEventHandler<StoreSessionRequest> = async (event) => {
           return {
             id: sessionAnswer.selectedAnswerId,
             question: {
-              categoryId: body.categoryId,
+              categoryId: quiz.categoryId,
               id: sessionAnswer.questionId,
-              difficulty: body.difficulty,
+              difficulty: quiz.difficulty,
             },
           };
         }),
@@ -47,8 +60,7 @@ const __handler__: ToEventHandler<StoreSessionRequest> = async (event) => {
 
     const session = await RepositoryProvider.sessionRepository.addOne({
       data: {
-        difficulty: body.difficulty,
-        categoryId: body.categoryId,
+        quizId: body.quizId,
         userId: authUser.id,
         score: answers.reduce(
           (prev, curr) => (curr.isCorrect ? prev + 1 : prev),

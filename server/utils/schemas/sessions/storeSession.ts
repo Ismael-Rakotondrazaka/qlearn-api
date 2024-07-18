@@ -5,8 +5,7 @@ import type { Request } from "../../requests";
 import type { ResponseError } from "../../responses";
 
 export const StoreSessionBodySchema = z.object({
-  difficulty: z.number().int().positive().min(1).max(5),
-  categoryId: z.number().int().positive(),
+  quizId: z.number().int().positive(),
   sessionAnswers: z
     .array(
       z.object({

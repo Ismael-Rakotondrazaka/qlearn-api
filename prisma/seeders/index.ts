@@ -2,6 +2,7 @@
 import { PrismaClient } from "@prisma/client";
 import { createCategories } from "./categories";
 import { createQuestions } from "./questions";
+import { createQuizzes } from "./quizzes";
 import { createSessions } from "./sessions";
 import { createUsers } from "./users";
 
@@ -17,6 +18,15 @@ const main = async () => {
     prismaClient,
   });
   console.timeEnd("Category seed duration");
+
+  /* -------------------------------------------------------------------------- */
+
+  console.time("Quiz seed duration");
+  const quizzes = await createQuizzes({
+    categories,
+    prismaClient,
+  });
+  console.timeEnd("Quiz seed duration");
 
   /* -------------------------------------------------------------------------- */
 
@@ -42,6 +52,7 @@ const main = async () => {
     prismaClient,
     questions,
     users,
+    quizzes,
   });
   console.timeEnd("Session seed duration");
 

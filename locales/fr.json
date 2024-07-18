@@ -17,6 +17,9 @@
       },
       "sessions": {
         "store": {
+          "quizId": {
+            "notFound": "Le quiz est introuvable."
+          },
           "sessionAnswers": {
             "differentSize": "Le questionnaire doit contenir 10 questions."
           }

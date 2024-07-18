@@ -2,6 +2,7 @@ import { prismaClient } from "../prisma";
 import { AnswerRepository, UserRepository } from "../repositories";
 import { CategoryRepository } from "../repositories/categories";
 import { QuestionRepository } from "../repositories/questions";
+import { QuizRepository } from "../repositories/quizzes";
 import { SessionRepository } from "../repositories/sessions";
 
 export abstract class RepositoryProvider {
@@ -22,6 +23,10 @@ export abstract class RepositoryProvider {
   );
 
   public static answerRepository: AnswerRepository = new AnswerRepository(
+    prismaClient,
+  );
+
+  public static quizRepository: QuizRepository = new QuizRepository(
     prismaClient,
   );
 }

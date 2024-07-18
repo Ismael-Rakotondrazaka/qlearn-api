@@ -19,7 +19,6 @@ export class SessionRepository {
       orderBy,
       include: {
         user: true,
-        category: true,
       },
     });
 
@@ -37,7 +36,6 @@ export class SessionRepository {
       orderBy,
       include: {
         user: true,
-        category: true,
       },
     });
 
@@ -51,7 +49,6 @@ export class SessionRepository {
       data,
       include: {
         user: true,
-        category: true,
       },
     });
 
@@ -69,7 +66,6 @@ export class SessionRepository {
       data,
       include: {
         user: true,
-        category: true,
       },
     });
 

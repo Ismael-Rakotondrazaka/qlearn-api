@@ -5,6 +5,7 @@ import {
   UpdateCategoryBodySchema,
   UpdateCategoryParamsSchema,
 } from "~/server/utils/schemas/categories/updateCategory";
+
 const __handler__: ToEventHandler<UpdateCategoryRequest> = async (event) => {
   const translator = await Translator.new(event);
 
@@ -40,7 +41,6 @@ const __handler__: ToEventHandler<UpdateCategoryRequest> = async (event) => {
         },
         data: {
           name: body.name,
-          description: body.description,
         },
       });
 

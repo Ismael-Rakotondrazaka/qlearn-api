@@ -1,11 +1,10 @@
-import type { Category, Session, User } from "@prisma/client";
+import type { Session, User } from "@prisma/client";
 import { UserDTOMapper, type UserDTO } from "./users";
 
 export type SessionDTO = {
   id: number;
-  category: Category;
-  difficulty: number;
   score: number;
+  quizId: number;
   user: UserDTO;
   createdAt: Date;
   updatedAt: Date;
@@ -17,15 +16,13 @@ export abstract class SessionDTOMapper {
       user: User & {
         fullName: string;
       };
-      category: Category;
     },
   ): SessionDTO {
     return {
       id: question.id,
-      category: question.category,
+      quizId: question.quizId,
       createdAt: question.createdAt,
       updatedAt: question.updatedAt,
-      difficulty: question.difficulty,
       score: question.score,
       user: UserDTOMapper.fromUser(question.user),
     };
@@ -36,7 +33,6 @@ export abstract class SessionDTOMapper {
       user: User & {
         fullName: string;
       };
-      category: Category;
     })[],
   ): SessionDTO[] {
     return questions.map(this.fromSession);
