@@ -1,4 +1,3 @@
-import type { Prisma } from "@prisma/client";
 import { AuthServiceProvider, RepositoryProvider } from "~/server/utils";
 import { SessionDTOMapper } from "~/server/utils/dtos";
 
@@ -36,20 +35,11 @@ const __handler__: ToEventHandler<StoreSessionRequest> = async (event) => {
 
     const answers = await RepositoryProvider.answerRepository.findMany({
       where: {
-        AND: body.sessionAnswers.map(
-          (sessionAnswer): Prisma.AnswerWhereInput => {
-            return {
-              id: sessionAnswer.selectedAnswerId,
-              question: {
-                quiz: {
-                  categoryId: quiz.categoryId,
-                  difficulty: quiz.difficulty,
-                },
-                id: sessionAnswer.questionId,
-              },
-            };
-          },
-        ),
+        id: {
+          in: body.sessionAnswers.map(
+            (sessionAnswer) => sessionAnswer.selectedAnswerId,
+          ),
+        },
       },
     });
 
@@ -58,6 +48,28 @@ const __handler__: ToEventHandler<StoreSessionRequest> = async (event) => {
         data: {
           sessionAnswers: translator.t(
             "errors.requests.sessions.store.sessionAnswers.differentSize",
+          ),
+        },
+        translator,
+      });
+
+    const questionIdsByAnswerId = new Map<number, number>();
+    body.sessionAnswers.forEach((sessionAnswer) => {
+      questionIdsByAnswerId.set(
+        sessionAnswer.selectedAnswerId,
+        sessionAnswer.questionId,
+      );
+    });
+
+    if (
+      answers.some((answer) => {
+        return answer.questionId !== questionIdsByAnswerId.get(answer.id);
+      })
+    )
+      throw Exception.badRequest({
+        data: {
+          sessionAnswers: translator.t(
+            "errors.requests.sessions.store.sessionAnswers.notMatchingQuestionId",
           ),
         },
         translator,
