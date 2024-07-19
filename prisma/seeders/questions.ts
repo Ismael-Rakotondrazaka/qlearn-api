@@ -1,42 +1,34 @@
 import { faker } from "@faker-js/faker/locale/fr";
 import type {
   Answer,
-  Category,
   Prisma,
   PrismaClient,
   Question,
+  Quiz,
 } from "@prisma/client";
 import { createAnswers } from "./answers";
 
-export type QuestionPerLevel = Record<
+export type QuestionsPerQuiz = Record<
   number,
   (Question & {
     answers: Answer[];
   })[]
 >;
 
-export type QuestionPerCategory = Record<number, QuestionPerLevel>;
-
 const createQuestionData = (arg: {
-  difficulty: number;
-  categoryId: number;
+  quiz: Quiz;
 }): Prisma.QuestionCreateArgs["data"][] => {
-  const { categoryId, difficulty } = arg;
+  const { quiz } = arg;
 
   return faker.helpers.multiple(
     (): Prisma.QuestionCreateArgs["data"] => {
       const createdAt = faker.date.past();
 
       return {
-        difficulty,
         content: faker.lorem.sentence(),
         createdAt,
         updatedAt: createdAt,
-        category: {
-          connect: {
-            id: categoryId,
-          },
-        },
+        quizId: quiz.id,
         answers: createAnswers({
           refDate: createdAt,
         }),
@@ -50,32 +42,25 @@ const createQuestionData = (arg: {
 
 export const createQuestions = async (arg: {
   prismaClient: PrismaClient;
-  categories: Category[];
-}): Promise<QuestionPerCategory> => {
-  const { prismaClient, categories } = arg;
+  quizzes: Quiz[];
+}): Promise<QuestionsPerQuiz> => {
+  const { prismaClient, quizzes } = arg;
 
-  const result: QuestionPerCategory = {};
+  const result: QuestionsPerQuiz = {};
 
-  for (const category of categories) {
-    const questionPerLevel: QuestionPerLevel = {};
-
-    for (let level = 1; level <= 5; level++) {
-      questionPerLevel[level] = await Promise.all(
-        createQuestionData({
-          categoryId: category.id,
-          difficulty: level,
-        }).map((data) =>
-          prismaClient.question.create({
-            data,
-            include: {
-              answers: true,
-            },
-          }),
-        ),
-      );
-    }
-
-    result[category.id] = questionPerLevel;
+  for (const quiz of quizzes) {
+    result[quiz.id] = await Promise.all(
+      createQuestionData({
+        quiz,
+      }).map((data) =>
+        prismaClient.question.create({
+          data,
+          include: {
+            answers: true,
+          },
+        }),
+      ),
+    );
   }
 
   return result;

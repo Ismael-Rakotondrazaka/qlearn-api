@@ -32,20 +32,18 @@ model User {
 }
 
 model Category {
-  id        Int        @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   name      String
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  questions Question[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   quizzes   Quiz[]
 }
 
 model Question {
   id             Int             @id @default(autoincrement())
   content        String          @db.Text
-  categoryId     Int
-  category       Category        @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  difficulty     Int
+  quizId         Int
+  quiz           Quiz            @relation(fields: [quizId], references: [id], onDelete: Cascade)
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
   answers        Answer[]
@@ -64,15 +62,16 @@ model Answer {
 }
 
 model Quiz {
-  id          Int       @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   name        String
   description String
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
   categoryId  Int
-  category    Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  category    Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   difficulty  Int
   sessions    Session[]
+  questions   Question[]
 }
 
 model Session {

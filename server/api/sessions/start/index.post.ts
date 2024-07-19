@@ -19,8 +19,7 @@ const __handler__: ToEventHandler<StartSessionRequest> = async (event) => {
     const selectedQuestions = await RepositoryProvider.questionRepository
       .findMany({
         where: {
-          categoryId: body.categoryId,
-          difficulty: body.difficulty,
+          quizId: body.quizId,
         },
       })
       .then((questions) => faker.helpers.arrayElements(questions, 10));

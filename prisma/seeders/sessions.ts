@@ -1,22 +1,23 @@
 import { faker } from "@faker-js/faker";
-import type { Prisma, PrismaClient, Quiz, Session, User } from "@prisma/client";
-import type { QuestionPerCategory } from "./questions";
+import type { Prisma, PrismaClient, Session, User } from "@prisma/client";
+import type { QuestionsPerQuiz } from "./questions";
 import { createSessionAnswersData } from "./sessionAnswers";
 
 const createSessionData = (arg: {
   user: User;
-  quizzes: Quiz[];
-  questions: QuestionPerCategory;
+  questions: QuestionsPerQuiz;
   refDate: Date;
 }): Prisma.SessionCreateInput[] => {
-  const { user, questions, refDate, quizzes } = arg;
+  const { user, questions, refDate } = arg;
 
   return faker.helpers.multiple(
     (): Prisma.SessionCreateInput => {
-      const selectedQuiz = faker.helpers.arrayElement(quizzes);
+      const selectedQuizId = +faker.helpers.arrayElement(
+        Object.keys(questions),
+      );
 
       const selectedQuestions = faker.helpers.arrayElements(
-        questions[selectedQuiz.categoryId][selectedQuiz.difficulty],
+        questions[selectedQuizId],
         10,
       );
 
@@ -30,7 +31,7 @@ const createSessionData = (arg: {
       return {
         quiz: {
           connect: {
-            id: selectedQuiz.id,
+            id: selectedQuizId,
           },
         },
         user: {
@@ -55,11 +56,10 @@ const createSessionData = (arg: {
 
 export const createSessions = async (arg: {
   prismaClient: PrismaClient;
-  questions: QuestionPerCategory;
+  questions: QuestionsPerQuiz;
   users: User[];
-  quizzes: Quiz[];
 }): Promise<Session[]> => {
-  const { prismaClient, questions, users, quizzes } = arg;
+  const { prismaClient, questions, users } = arg;
 
   const results: Session[] = [];
 
@@ -68,7 +68,6 @@ export const createSessions = async (arg: {
       createSessionData({
         user,
         questions,
-        quizzes,
         refDate: user.createdAt,
       }).map((data) =>
         prismaClient.session.create({

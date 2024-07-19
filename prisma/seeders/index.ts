@@ -40,7 +40,7 @@ const main = async () => {
 
   console.time("Question seed duration");
   const questions = await createQuestions({
-    categories,
+    quizzes,
     prismaClient,
   });
   console.timeEnd("Question seed duration");
@@ -52,7 +52,6 @@ const main = async () => {
     prismaClient,
     questions,
     users,
-    quizzes,
   });
   console.timeEnd("Session seed duration");
 

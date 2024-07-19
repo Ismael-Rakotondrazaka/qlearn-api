@@ -1,17 +1,23 @@
 import { faker } from "@faker-js/faker";
-import type { Answer, Category, Question, SessionAnswer } from "@prisma/client";
+import type {
+  Answer,
+  Category,
+  Question,
+  Quiz,
+  SessionAnswer,
+} from "@prisma/client";
 import type { AnswerDTO } from "./answers";
 import { AnswerDTOMapper } from "./answers";
-import { CategoryDTOMapper } from "./categories";
+import { QuizDTOMapper, type QuizDTO } from "./quizzes";
+
 export type QuestionDTO = {
   id: number;
   content: string;
-  difficulty: number;
-  category: CategoryDTO;
+  quiz: QuizDTO;
   createdAt: Date;
   updatedAt: Date;
   answers: AnswerDTO[];
-  attempts: {
+  _sessionAnswers: {
     count: number;
     success: number;
     rate: number;
@@ -21,7 +27,16 @@ export type QuestionDTO = {
 export abstract class QuestionDTOMapper {
   public static fromQuestion(
     question: Question & {
-      category: Category;
+      quiz: Quiz & {
+        category: Category & {
+          _count: {
+            quizzes: number;
+          };
+        };
+        _count: {
+          sessions: number;
+        };
+      };
       answers: Answer[];
       sessionAnswers: (SessionAnswer & {
         selectedAnswer: Answer;
@@ -38,14 +53,13 @@ export abstract class QuestionDTOMapper {
     return {
       id: question.id,
       content: question.content,
-      difficulty: question.difficulty,
+      quiz: QuizDTOMapper.fromQuiz(question.quiz),
       createdAt: question.createdAt,
       updatedAt: question.updatedAt,
-      category: CategoryDTOMapper.fromCategory(question.category),
       answers: faker.helpers.shuffle(
         AnswerDTOMapper.fromAnswers(question.answers),
       ),
-      attempts: {
+      _sessionAnswers: {
         count,
         success,
         rate,
@@ -55,7 +69,16 @@ export abstract class QuestionDTOMapper {
 
   public static fromQuestions(
     questions: (Question & {
-      category: Category;
+      quiz: Quiz & {
+        category: Category & {
+          _count: {
+            quizzes: number;
+          };
+        };
+        _count: {
+          sessions: number;
+        };
+      };
       answers: Answer[];
       sessionAnswers: (SessionAnswer & {
         selectedAnswer: Answer;

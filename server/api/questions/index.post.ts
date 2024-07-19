@@ -43,8 +43,7 @@ const __handler__: ToEventHandler<StoreQuestionRequest> = async (event) => {
     const question = await RepositoryProvider.questionRepository.addOne({
       data: {
         content: body.content,
-        difficulty: body.difficulty,
-        categoryId: body.categoryId,
+        quizId: body.quizId,
         answers: {
           createMany: {
             data: body.answers,

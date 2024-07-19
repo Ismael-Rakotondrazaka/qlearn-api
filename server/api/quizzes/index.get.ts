@@ -39,7 +39,7 @@ const __handler__: ToEventHandler<IndexQuizRequest> = async (event) => {
       ],
     });
 
-    const quizDTOs = QuizDTOMapper.fromQuizs(quizzes);
+    const quizDTOs = QuizDTOMapper.fromQuizzes(quizzes);
 
     return {
       quizzes: quizDTOs,
