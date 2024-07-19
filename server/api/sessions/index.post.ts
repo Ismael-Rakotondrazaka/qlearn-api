@@ -1,3 +1,4 @@
+import type { Prisma } from "@prisma/client";
 import { AuthServiceProvider, RepositoryProvider } from "~/server/utils";
 import { SessionDTOMapper } from "~/server/utils/dtos";
 
@@ -35,16 +36,20 @@ const __handler__: ToEventHandler<StoreSessionRequest> = async (event) => {
 
     const answers = await RepositoryProvider.answerRepository.findMany({
       where: {
-        AND: body.sessionAnswers.map((sessionAnswer) => {
-          return {
-            id: sessionAnswer.selectedAnswerId,
-            question: {
-              categoryId: quiz.categoryId,
-              id: sessionAnswer.questionId,
-              difficulty: quiz.difficulty,
-            },
-          };
-        }),
+        AND: body.sessionAnswers.map(
+          (sessionAnswer): Prisma.AnswerWhereInput => {
+            return {
+              id: sessionAnswer.selectedAnswerId,
+              question: {
+                quiz: {
+                  categoryId: quiz.categoryId,
+                  difficulty: quiz.difficulty,
+                },
+                id: sessionAnswer.questionId,
+              },
+            };
+          },
+        ),
       },
     });
 
