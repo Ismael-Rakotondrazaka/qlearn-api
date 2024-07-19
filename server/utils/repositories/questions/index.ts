@@ -18,7 +18,24 @@ export class QuestionRepository {
       where,
       orderBy,
       include: {
-        category: true,
+        quiz: {
+          include: {
+            _count: {
+              select: {
+                sessions: true,
+              },
+            },
+            category: {
+              include: {
+                _count: {
+                  select: {
+                    quizzes: true,
+                  },
+                },
+              },
+            },
+          },
+        },
         answers: true,
         sessionAnswers: {
           include: {
@@ -43,7 +60,24 @@ export class QuestionRepository {
       where,
       orderBy,
       include: {
-        category: true,
+        quiz: {
+          include: {
+            _count: {
+              select: {
+                sessions: true,
+              },
+            },
+            category: {
+              include: {
+                _count: {
+                  select: {
+                    quizzes: true,
+                  },
+                },
+              },
+            },
+          },
+        },
         answers: true,
         sessionAnswers: {
           include: {
@@ -62,7 +96,24 @@ export class QuestionRepository {
     const question = await this.#prismaClient.question.create({
       data,
       include: {
-        category: true,
+        quiz: {
+          include: {
+            _count: {
+              select: {
+                sessions: true,
+              },
+            },
+            category: {
+              include: {
+                _count: {
+                  select: {
+                    quizzes: true,
+                  },
+                },
+              },
+            },
+          },
+        },
         answers: true,
         sessionAnswers: {
           include: {
@@ -85,7 +136,16 @@ export class QuestionRepository {
       where,
       data,
       include: {
-        category: true,
+        quiz: {
+          include: {
+            _count: {
+              select: {
+                sessions: true,
+              },
+            },
+            category: true,
+          },
+        },
         answers: true,
         sessionAnswers: {
           include: {

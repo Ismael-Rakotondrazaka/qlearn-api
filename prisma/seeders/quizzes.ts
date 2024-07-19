@@ -24,7 +24,7 @@ export const createQuizzes = async (arg: {
         };
       },
       {
-        count: 10,
+        count: 5,
       },
     ),
   });

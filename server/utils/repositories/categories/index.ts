@@ -12,6 +12,13 @@ export class CategoryRepository {
     const { data } = arg;
     const category = await this.#prismaClient.category.create({
       data,
+      include: {
+        _count: {
+          select: {
+            quizzes: true,
+          },
+        },
+      },
     });
 
     return category;
@@ -23,6 +30,13 @@ export class CategoryRepository {
     const { orderBy } = arg;
     const categories = await this.#prismaClient.category.findMany({
       orderBy,
+      include: {
+        _count: {
+          select: {
+            quizzes: true,
+          },
+        },
+      },
     });
 
     return categories;
@@ -36,6 +50,13 @@ export class CategoryRepository {
     const category = await this.#prismaClient.category.findFirst({
       where,
       orderBy,
+      include: {
+        _count: {
+          select: {
+            quizzes: true,
+          },
+        },
+      },
     });
     return category;
   }
@@ -45,6 +66,13 @@ export class CategoryRepository {
 
     await this.#prismaClient.category.delete({
       where,
+      include: {
+        _count: {
+          select: {
+            quizzes: true,
+          },
+        },
+      },
     });
   }
 
@@ -57,6 +85,13 @@ export class CategoryRepository {
     const category = await this.#prismaClient.category.update({
       where,
       data,
+      include: {
+        _count: {
+          select: {
+            quizzes: true,
+          },
+        },
+      },
     });
 
     return category;

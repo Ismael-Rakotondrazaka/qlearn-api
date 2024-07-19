@@ -18,7 +18,15 @@ export class QuizRepository {
       where,
       orderBy,
       include: {
-        category: true,
+        category: {
+          include: {
+            _count: {
+              select: {
+                quizzes: true,
+              },
+            },
+          },
+        },
         _count: {
           select: {
             sessions: true,
@@ -42,7 +50,15 @@ export class QuizRepository {
       where,
       orderBy,
       include: {
-        category: true,
+        category: {
+          include: {
+            _count: {
+              select: {
+                quizzes: true,
+              },
+            },
+          },
+        },
         _count: {
           select: {
             sessions: true,
@@ -60,7 +76,15 @@ export class QuizRepository {
     const quiz = await this.#prismaClient.quiz.create({
       data,
       include: {
-        category: true,
+        category: {
+          include: {
+            _count: {
+              select: {
+                quizzes: true,
+              },
+            },
+          },
+        },
         _count: {
           select: {
             sessions: true,
@@ -82,7 +106,15 @@ export class QuizRepository {
       where,
       data,
       include: {
-        category: true,
+        category: {
+          include: {
+            _count: {
+              select: {
+                quizzes: true,
+              },
+            },
+          },
+        },
         _count: {
           select: {
             sessions: true,

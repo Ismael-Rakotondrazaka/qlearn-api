@@ -67,7 +67,6 @@ export class AnswerRepository {
         id: questionId,
       },
       include: {
-        category: true,
         answers: true,
         sessionAnswers: {
           include: {

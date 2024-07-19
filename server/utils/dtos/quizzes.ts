@@ -18,7 +18,11 @@ export type QuizDTO = {
 export abstract class QuizDTOMapper {
   public static fromQuiz(
     quiz: Quiz & {
-      category: Category;
+      category: Category & {
+        _count: {
+          quizzes: number;
+        };
+      };
       _count: {
         sessions: number;
       };
@@ -38,9 +42,13 @@ export abstract class QuizDTOMapper {
     };
   }
 
-  public static fromQuizs(
+  public static fromQuizzes(
     quizzes: (Quiz & {
-      category: Category;
+      category: Category & {
+        _count: {
+          quizzes: number;
+        };
+      };
       _count: {
         sessions: number;
       };
