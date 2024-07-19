@@ -25,6 +25,9 @@ const __handler__: ToEventHandler<IndexQuizRequest> = async (event) => {
         categoryId: {
           equals: query["categoryId[eq]"],
         },
+        difficulty: {
+          equals: query["difficulty[eq]"],
+        },
       },
       orderBy: [
         {

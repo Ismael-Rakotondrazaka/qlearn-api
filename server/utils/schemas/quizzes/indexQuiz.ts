@@ -8,6 +8,7 @@ export const IndexQuizQuerySchema = z.object({
   "name[contains]": z.string().optional(),
   "description[contains]": z.string().optional(),
   "categoryId[eq]": z.coerce.number().optional(),
+  "difficulty[eq]": z.coerce.number().positive().int().min(1).max(5).optional(),
   "orderBy[createdAt]": z.enum(["asc", "desc"]).optional(),
   "orderBy[name]": z.enum(["asc", "desc"]).optional().default("asc"),
   "orderBy[difficulty]": z.enum(["asc", "desc"]).optional().default("asc"),
