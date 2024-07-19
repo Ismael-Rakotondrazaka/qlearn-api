@@ -21,7 +21,8 @@
             "notFound": "Le quiz est introuvable."
           },
           "sessionAnswers": {
-            "differentSize": "Le questionnaire doit contenir 10 questions."
+            "differentSize": "Le questionnaire doit contenir 10 questions.",
+            "notMatchingQuestionId": "Une ou plusieurs réponses ne font pas partis des réponses possibles."
           }
         }
       },
