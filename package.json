@@ -13,6 +13,7 @@
     "lint:fix": "npx eslint . --fix",
     "db:reset": "npx prisma migrate reset --force --skip-seed",
     "db:seed": "npx prisma db push && npx tsx prisma/seeders/index.ts",
+    "db:seed:prod": "npx prisma db push && npx tsx prisma/seeders/prod/index.ts",
     "prepare": "husky"
   },
   "dependencies": {
