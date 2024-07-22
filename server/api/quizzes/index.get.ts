@@ -12,22 +12,50 @@ const __handler__: ToEventHandler<IndexQuizRequest> = async (event) => {
     const query =
       await requestInputGetter.getValidatedQueries(IndexQuizQuerySchema);
 
+    const haveWhereQueries = Object.keys(query).some(
+      (key) =>
+        [
+          "name[contains]",
+          "description[contains]",
+          "categoryId[in]",
+          "categoryId[eq]",
+          "difficulty[eq]",
+        ].includes(key) && query[key as keyof typeof query] !== undefined,
+    );
+
     const quizzes = await RepositoryProvider.quizRepository.findMany({
       where: {
-        name: {
-          contains: query["name[contains]"],
-          mode: "insensitive",
-        },
-        description: {
-          contains: query["description[contains]"],
-          mode: "insensitive",
-        },
-        categoryId: {
-          equals: query["categoryId[eq]"],
-        },
-        difficulty: {
-          equals: query["difficulty[eq]"],
-        },
+        OR: haveWhereQueries
+          ? [
+              {
+                name: {
+                  contains: query["name[contains]"],
+                  mode: "insensitive",
+                },
+              },
+              {
+                description: {
+                  contains: query["description[contains]"],
+                  mode: "insensitive",
+                },
+              },
+              {
+                categoryId: {
+                  in: query["categoryId[in]"],
+                },
+              },
+              {
+                categoryId: {
+                  equals: query["categoryId[eq]"],
+                },
+              },
+              {
+                difficulty: {
+                  equals: query["difficulty[eq]"],
+                },
+              },
+            ]
+          : undefined,
       },
       orderBy: [
         {
