@@ -8,14 +8,28 @@ const __handler__: ToEventHandler<IndexAnswerRequest> = async (event) => {
     // Validate input and retrieve parameters
     const validator = new Validator(translator);
     const requestInputGetter = new RequestInputGetter(event, validator);
-    const params = await requestInputGetter.getValidatedQueries(
+    const queries = await requestInputGetter.getValidatedQueries(
       IndexAnswerQuerySchema,
+    );
+
+    const haveWhereQueries = Object.keys(queries).some(
+      (key) =>
+        ["questionId[eq]"].includes(key) &&
+        queries[key as keyof typeof queries] !== undefined,
     );
 
     // Retrieve question from repository based on questionId
     const answers = await RepositoryProvider.answerRepository.findMany({
       where: {
-        questionId: params.questionId,
+        OR: haveWhereQueries
+          ? [
+              {
+                questionId: {
+                  equals: queries["questionId[eq]"],
+                },
+              },
+            ]
+          : undefined,
       },
     });
 

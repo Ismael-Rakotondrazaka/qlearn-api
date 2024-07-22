@@ -1,4 +1,3 @@
-import type { Prisma } from "@prisma/client";
 import { RepositoryProvider } from "~/server/utils";
 import { CategoryDTOMapper } from "~/server/utils/dtos";
 
@@ -13,16 +12,12 @@ const __handler__: ToEventHandler<IndexCategoryRequest> = async (event) => {
       IndexCategoryQuerySchema,
     );
 
-    let prismaQuery: Prisma.CategoryOrderByWithAggregationInput | undefined;
-
-    if (query["orderBy[name]"]) {
-      prismaQuery = {
-        name: query["orderBy[name]"] as Prisma.SortOrder,
-      };
-    }
-
     const categories = await RepositoryProvider.categoryRepository.findMany({
-      orderBy: prismaQuery,
+      orderBy: [
+        {
+          name: query["orderBy[name]"],
+        },
+      ],
     });
 
     return {

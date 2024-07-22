@@ -8,28 +8,40 @@ const __handler__: ToEventHandler<IndexQuestionRequest> = async (event) => {
     const validator = new Validator(translator);
     const requestInputGetter = new RequestInputGetter(event, validator);
 
-    const query = await requestInputGetter.getValidatedQueries(
+    const queries = await requestInputGetter.getValidatedQueries(
       IndexQuestionQuerySchema,
+    );
+
+    const haveWhereQueries = Object.keys(queries).some(
+      (key) =>
+        ["content[contains]"].includes(key) &&
+        queries[key as keyof typeof queries] !== undefined,
     );
 
     const questions = await RepositoryProvider.questionRepository.findMany({
       where: {
-        content: {
-          contains: query["content[contains]"],
-          mode: "insensitive",
-        },
+        OR: haveWhereQueries
+          ? [
+              {
+                content: {
+                  contains: queries["content[contains]"],
+                  mode: "insensitive",
+                },
+              },
+            ]
+          : undefined,
       },
       orderBy: [
         {
           quiz: {
-            difficulty: query["orderBy[difficulty]"],
+            difficulty: queries["orderBy[difficulty]"],
           },
         },
         {
-          content: query["orderBy[content]"],
+          content: queries["orderBy[content]"],
         },
         {
-          createdAt: query["orderBy[createdAt]"],
+          createdAt: queries["orderBy[createdAt]"],
         },
       ],
     });

@@ -20,6 +20,10 @@ export class RequestInputGetter<
     this.#validator = validator;
   }
 
+  /* -------------------------------------------------------------------------- */
+  /*                                    Body                                    */
+  /* -------------------------------------------------------------------------- */
+
   async getUnsafeBody(): Promise<Request["body"]> {
     let result: unknown = {};
 
@@ -57,6 +61,10 @@ export class RequestInputGetter<
     return this.#validator.validate(schema, body);
   }
 
+  /* -------------------------------------------------------------------------- */
+  /*                                   Params                                   */
+  /* -------------------------------------------------------------------------- */
+
   getUnsafeParams() {
     return getRouterParams(this.#event);
   }
@@ -66,6 +74,10 @@ export class RequestInputGetter<
   >(schema: TSchema) {
     return this.#validator.validate(schema, this.getUnsafeParams());
   }
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   Queries                                  */
+  /* -------------------------------------------------------------------------- */
 
   getUnsafeQueries() {
     return getQuery(this.#event);

@@ -5,7 +5,7 @@ import type { ResponseError } from "../../responses";
 
 export const IndexAnswerQuerySchema = z
   .object({
-    questionId: z.coerce.number(),
+    "questionId[eq]": z.coerce.number(),
   })
   .partial();
 

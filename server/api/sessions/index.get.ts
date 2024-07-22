@@ -12,10 +12,22 @@ const __handler__: ToEventHandler<IndexSessionRequest> = async (event) => {
       IndexSessionQuerySchema,
     );
 
+    const haveWhereQueries = Object.keys(query).some(
+      (key) =>
+        ["userId[eq]", "quizId[eq]"].includes(key) &&
+        query[key as keyof typeof query] !== undefined,
+    );
+
     const sessions = await RepositoryProvider.sessionRepository.findMany({
       where: {
-        userId: query["userId[eq]"],
-        quizId: query["quizId[eq]"],
+        OR: haveWhereQueries
+          ? [
+              {
+                userId: query["userId[eq]"],
+                quizId: query["quizId[eq]"],
+              },
+            ]
+          : undefined,
       },
       orderBy: {
         createdAt: query["orderBy[createdAt]"],

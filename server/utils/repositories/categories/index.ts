@@ -25,7 +25,9 @@ export class CategoryRepository {
   }
 
   public async findMany(arg: {
-    orderBy?: Prisma.CategoryOrderByWithAggregationInput;
+    orderBy?:
+      | Prisma.CategoryOrderByWithAggregationInput
+      | Prisma.CategoryOrderByWithAggregationInput[];
   }) {
     const { orderBy } = arg;
     const categories = await this.#prismaClient.category.findMany({
